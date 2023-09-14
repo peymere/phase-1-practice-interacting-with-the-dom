@@ -16,3 +16,20 @@ function addCommentToPage(comment){
     document.getElementById('list').append(p)
     
 }
+
+const likeButton= document.getElementById('heart')
+const minusButton= document.getElementById('minus')
+const plusButton= document.getElementById('plus')
+const pauseButton= document.getElementById('pause')
+
+plusButton.addEventListener('click', countNumber)
+
+let count= 0
+ function countNumber () {
+    count++
+    document.getElementById('counter').innerText= count
+}    
+ 
+likeButton.addEventListener('click', e => {
+    alert('It was clicked')
+})
