@@ -20,33 +20,71 @@ const likeButton= document.getElementById('heart')
 const minusButton= document.getElementById('minus')
 const plusButton= document.getElementById('plus')
 const pauseButton= document.getElementById('pause')
+const submitButton = document.getElementById('submit')
 
-//PLUS AND MINUS BUTTONS FUNCTIONALITY
+/////////////TIMER FUNCTIONALITIES////////////
+const myCounter = document.getElementById('counter')
+let intervalID = setInterval(increment, 1000)
+function increment() { 
+    myCounter.textContent++
+}
+let paused = false
+
+//PLUS AND MINUS BUTTONS
 plusButton.addEventListener('click', countNumber)
 minusButton.addEventListener('click', minusNumber)
-
-let count= 0
- function countNumber () {
-    count++
-    document.getElementById('counter').innerText= count
+function countNumber () {
+    myCounter.textContent++
+    //document.getElementById('counter').innerText= count
 }  
 function minusNumber () {
-    count--
-    document.getElementById('counter').innerText= count
+    myCounter.textContent--
+    //document.getElementById('counter').innerText= count
 }      
- 
+
+//STARTS THE COUNT TIMER
+// document.addEventListener('DOMContentLoaded', function () {
+//     intervalID = setInterval(function () {
+//         count += 1
+//         myCounter.textContent = count
+//     }, 1000)
+// })
+
+//PAUSE BUTTON
+pauseButton.addEventListener('click', function(){
+    paused = !paused
+    const buttons = [likeButton, plusButton, minusButton, submitButton]
+    buttons.forEach( button => button.disabled = paused)
+    pauseButton.innerText = paused ? 'resume' : 'pause'
+    if (paused) {
+        clearInterval(intervalID)
+    } else {
+        intervalID = setInterval(increment, 1000)
+    }
+})
+
 //LIKE BUTTON FUNCTIONALITY
+likesContainer = document.getElementById('likes')
 likeButton.addEventListener('click', handleLikeButton)
-likeNum = 0
+
 function handleLikeButton(){
     //alert('It was clicked')
-    likeNum++
-    console.log(likeNum)
-    const li = document.createElement('li')
-    li.dataset.count = count
-    const likeComment = document.getElementById('likes')
-    li.innerText = `${count} was liked ${likeNum} time(s)`
-    likeComment.append(li)
+    const theNum = myCounter.innerText
+    const foundLi = document.getElementById(`num-${theNum}`)
+    if(foundLi) {
+        const thatSpan = foundLi.querySelector('span')
+        thatSpan.innerText++
+        if(thatSpan.innerText == '2'){
+            foundLi.append('s')
+        }
+    } else {
+        const theText = `${theNum} has been liked <span>1</span> time` 
+        const li = document.createElement('li')
+        li.id = `num-${theNum}`
+        li.innerHTML = theText
+        likesContainer.append(li)
+
+    }
 } 
 //likes per number on same line
 //reset like counter for each number
@@ -58,23 +96,3 @@ function handleLikeButton(){
 // console.log(myCounter)
 // console.log(myCounterNum)
 
-
-//STARTS THE COUNT TIMER
-const myCounter = document.getElementById('counter')
-document.addEventListener('DOMContentLoaded', function () {
-    intervalID = setInterval(function () {
-        // const myCounter = document.getElementById('counter')
-        // const myCounterNum = parseInt(myCounter.innerText)
-        // myCounter.innerText = myCounterNum + 1
-        // console.log("hi!")
-        count += 1
-        myCounter.textContent = count
-    }, 1000)
-})
-//HANDLES THE PAUSE BUTTON TIMER STOP
-let intervalID
-pauseButton.addEventListener('click', function(){
-    clearInterval(intervalID)
-})
-//DISABLES ALL BUTTONS ON PAUSE
-//HANDLES THE RESUME FEATURE
